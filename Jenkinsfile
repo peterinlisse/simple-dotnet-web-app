@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     stages {
         stage('Build') {
             steps {
@@ -7,13 +8,15 @@ pipeline {
                 sh 'dotnet build --no-restore'
             }
         }
+
         stage('Test') { 
             steps {
-                sh 'dotnet test --no-build --no-restore --collect "XPlat Code Coverage"' 
+                sh 'dotnet test --no-build --no-restore --collect "XPlat Code Coverage"'
             }
             post {
                 always {
-                    recordCoverage(tools: [[parser: 'COBERTURA', pattern: '**/*.xml']], sourceDirectories: [[path: 'SimpleWebApi.Test/TestResults']])  
+                    recordCoverage tools: [[parser: 'COBERTURA', pattern: '**/*.xml']], 
+                                   sourceDirectories: [[path: 'SimpleWebApi.Test/TestResults']]
                 }
             }
         }
