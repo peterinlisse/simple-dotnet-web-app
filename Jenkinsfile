@@ -38,12 +38,8 @@ pipeline {
 	
 	post {
 			always {
-			// Archive MSTest results using xUnit plugin
-			xunit(
-				tools: [
-					MSTest(deleteOutputFiles: true, failIfNotNew: false, pattern: '**/TestResults/*.trx', skipNoTestFiles: false, stopProcessingIfError: true)
-				]
-				)
-			}
+                    // Archive test results for Jenkins
+                    mstest testResultsFile: '**/TestResults/*.trx'
+                }
 		}
 }
