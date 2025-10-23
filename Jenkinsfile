@@ -2,33 +2,44 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Checkout') {
+		  steps {
+			git branch: 'main',
+				url: 'https://github.com/peterinlisse/jenkinstest.git',
+				credentialsId: 'git1'
+		  }
+		}
+
+        stage('Restore') {
             steps {
+                // Restore NuGet packages
                 sh 'dotnet restore'
-                sh 'dotnet build --no-restore'
             }
         }
 
-        stage('Test') { 
+        stage('Build') {
             steps {
-                sh 'dotnet test --no-build --no-restore --collect "XPlat Code Coverage"'
-            }
-            post {
-                always {
-                    recordCoverage tools: [[parser: 'COBERTURA', pattern: '**/*.xml']], 
-                                   sourceDirectories: [[path: 'SimpleWebApi.Test/TestResults']]
-                }
+                // Build the solution
+                sh 'dotnet build LocalLibJenkinsTest1.sln --configuration Release'
             }
         }
-		stage('Deliver') {
+
+        stage('Test') {
             steps {
-                sh 'dotnet publish SimpleWebApi --no-restore -o published'
-            }
-            post {
-                success {
-                    archiveArtifacts 'published/*.*'
-                }
+                // Run MSTest tests
+                sh 'dotnet test LocalLibJenkinsTest1.sln --logger "trx;LogFileName=TestResults.trx" --configuration Release'
             }
         }
-    }
+	}
+	
+	post {
+			always {
+			// Archive MSTest results using xUnit plugin
+			xunit(
+				tools: [
+					MSTest(deleteOutputFiles: true, failIfNotNew: false, pattern: '**/TestResults/*.trx', skipNoTestFiles: false, stopProcessingIfError: true)
+				]
+				)
+			}
+		}
 }
