@@ -6,6 +6,20 @@ pipeline {
     }
 
     stages {
+	
+		stage('Start SQL Container') {
+            steps {
+                // Run SQL container from basetestcontainer:v1 image
+                sh '''
+                    docker run -d --name sqltestcontainer \
+                    -e "ACCEPT_EULA=Y" \
+                    -e "SA_PASSWORD=Password1!" \
+                    -p 1433:1433 \
+                    basetestcontainer:v1
+                '''
+            }
+        }
+		
         stage('Checkout') {
 		  steps {
 			git branch: 'main',
