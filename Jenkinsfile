@@ -55,6 +55,12 @@ pipeline {
 			always {
                     // Archive test results for Jenkins
                     mstest testResultsFile: '**/TestResults/*.trx'
+					
+					  // Stop and remove the SQL container
+					sh '''
+						docker stop sqltestcontainer_docker || true
+						docker rm sqltestcontainer_docker || true
+					'''
                 }
 		}
 }
