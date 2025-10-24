@@ -12,7 +12,7 @@ pipeline {
             steps {
                 // Run SQL container from basetestcontainer:v1 image
                 sh '''
-                    docker run -d --name sqltestcontainer \
+                    docker run -d --name sqltestcontainer_docker \
                     -e "ACCEPT_EULA=Y" \
                     -e "SA_PASSWORD=Password1!" \
                     -p 1433:1433 \
