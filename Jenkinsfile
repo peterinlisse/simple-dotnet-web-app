@@ -46,7 +46,7 @@ pipeline {
         stage('Test') {
             steps {
                 // Run MSTest tests
-                sh 'dotnet test LocalLibJenkinsTest1.sln --logger "trx;LogFileName=TestResults.trx" --configuration Release'
+                sh 'dotnet test LocalLibJenkinsTest1.sln --logger "trx;LogFileName=TestResults.trx" --logger "console;verbosity=detailed" --configuration Release'
             }
         }
 	}
