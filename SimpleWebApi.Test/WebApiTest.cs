@@ -16,6 +16,7 @@ public class WebApiTest : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task TestWebApi()
     {
+        Console.WriteLine("Starting TestWebApi");
         // Arrange
         var client = _factory.CreateClient();
 
@@ -31,6 +32,8 @@ public class WebApiTest : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task TestSwagger()
     {
+        Console.WriteLine("Starting TestSwagger");
+
         // Arrange
         var client = _factory.CreateClient();
 
@@ -46,6 +49,8 @@ public class WebApiTest : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task TestFretchSQL()
     {
+        Console.WriteLine("Starting TestFretchSQL");
+
         bool testRun = false;
         //Connection string to SQL Server on port 1433
         string connectionString = "Server=localhost,1433;Database=testDB;User Id=sa;Password=Password1!;Encrypt=true;TrustServerCertificate=true;";
